@@ -112,12 +112,13 @@ sfdeploy.maxPoll = 20`
 func main() {
 	fmt.Println("What would you like to name the new ANT project folder?")
 	projectFolderName, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	check(err)
+	checkErr(err)
+
 	projectFolderName = strings.Replace(projectFolderName, "\n", "", -1)
 
 	// Create empty directories for proejct
-	check(os.MkdirAll(projectPath+projectFolderName, os.ModePerm))
-	check(os.MkdirAll(projectPath+projectFolderName+"/src/", os.ModePerm))
+	checkErr(os.MkdirAll(projectPath+projectFolderName, os.ModePerm))
+	checkErr(os.MkdirAll(projectPath+projectFolderName+"/src/", os.ModePerm))
 
 	// Create build files and package.xml from temp
 	createFile(projectPath+projectFolderName+"/src/package.xml", packageXMLString)
@@ -126,16 +127,10 @@ func main() {
 
 	cmd := exec.Command("code", ".")
 	cmd.Dir = projectPath + projectFolderName
-	out, err := cmd.Output()
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		fmt.Printf("%s", out)
-	}
-
+	checkErr(cmd.Run())
 }
 
-func check(e error) {
+func checkErr(e error) {
 	if e != nil {
 		log.Fatal(e)
 	}
