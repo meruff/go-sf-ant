@@ -8,8 +8,19 @@ Because I work with many different client orgs, I found it annoying to have to c
 ```sh
 $ go get -u github.com/meruff/go-sf-ant
 ```
-`main.go` includes a constant named `projectPath` where you designate the directory you'd like the ANT project to be generated in, i.e: `'/Users/username/Documents/ANT'`.
+Once you run the app it'll ask you what you'd like to name the new directory. Upon submitting the name it'll create the files, `cd` in, and open the project in VSCode.
+
+### Configuration
+`main.go` includes a constant named `GOSFANTPROJECTPATH` that points to an environment variable where you designate the directory you'd like the ANT project to be generated in each time, i.e: 
+```sh
+$ export GOSFANTPROJECTPATH=/Users/username/Documents/ANT/
+``` 
+
+You can also manually designate a one-off directory path for the new ANT project by setting a `-d` flag value upon executing the command: 
+```sh
+$ go-sf-ant -d /Users/username/Documents/ANT/
+```
+
+If you don't have an environment variable set up, and don't designate a flag value, then go-sf-ant will just create the project in your current working directory.
 
 I personally use [Alfred](https://www.alfredapp.com/) to run the app so all I have to do is type `cmd + space` to open Alfred and then `open go-sf-ant`, which can be run from anywhere in the OS. 
-
-Once you run the app it'll ask you what you'd like to name the new directory. Upon submitting the name it'll create the files, `cd` in, and open the project in VSCode.
