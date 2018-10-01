@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -11,9 +12,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-// projectPath is the literal string path where the template files will be created.
-// Example: "/Users/username/Documents/"
-const projectPath = "/Users/username/Documents/"
+const envPath = "GOSFANTPROJECTPATH"
+
+var dFlag = flag.String("d", "", "a path to the directory where go-sf-ant will create the ANT project")
 
 var packageXMLString = `<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
@@ -110,10 +111,35 @@ sfdeploy.serverurl = https://login.salesforce.com
 sfdeploy.maxPoll = 20`
 
 func main() {
+	var projectPath string
+	flag.Parse()
+
+	if *dFlag != "" {
+		customProjectPath := *dFlag
+
+		for !strings.HasPrefix(customProjectPath, "/") || !strings.HasSuffix(customProjectPath, "/") {
+			fmt.Println("Dirctory paths must begin and end with '/'. Please enter a valid direcotry path (ex: '/Users/username/documents/'")
+			var err error
+			customProjectPath, err = bufio.NewReader(os.Stdin).ReadString('\n')
+			checkErr(err)
+			customProjectPath = strings.Replace(customProjectPath, "\n", "", -1)
+			projectPath = customProjectPath
+		}
+	}
+
+	if projectPath == "" {
+		if os.Getenv(envPath) != "" {
+			projectPath = os.Getenv(envPath)
+		} else {
+			dir, err := os.Getwd()
+			checkErr(err)
+			projectPath = dir + "/"
+		}
+	}
+
 	fmt.Println("What would you like to name the new ANT project folder?")
 	projectFolderName, err := bufio.NewReader(os.Stdin).ReadString('\n')
 	checkErr(err)
-
 	projectFolderName = strings.Replace(projectFolderName, "\n", "", -1)
 
 	// Create empty directories for proejct
