@@ -128,8 +128,8 @@ func main() {
 	}
 
 	if projectPath == "" {
-		if os.Getenv(envPath) != "" {
-			projectPath = os.Getenv(envPath)
+		if value, ok := os.LookupEnv(envPath); ok {
+			projectPath = value
 		} else {
 			dir, err := os.Getwd()
 			checkErr(err)
