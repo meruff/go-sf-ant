@@ -42,7 +42,7 @@ var packageXMLString = `<?xml version="1.0" encoding="UTF-8"?>
 		<members>*</members>
 		<name>StaticResource</name>
 	</types>
-	<version>43.0</version>
+	<version>48.0</version>
 </Package>`
 
 var buildXMLString = `<project name="antProject" default="main" basedir="." xmlns:sf="antlib:com.salesforce">
